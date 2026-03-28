@@ -1,0 +1,64 @@
+{% extends "layouts/layout_admin.html" %}
+
+{% block title %}Inventario{% endblock %}
+{% block page_title %}Inventario{% endblock %}
+
+{% block content %}
+
+<div class="filtros-pedidos">
+
+    <a href="{{ url_for('routes_admin.inventario') }}">
+        Todos
+    </a>
+
+    {% for categoria in categorias %}
+        <a href="{{ url_for('routes_admin.inventario', categoria=categoria.id_categoria) }}">
+            {{ categoria.nombre }}
+        </a>
+    {% endfor %}
+
+</div>
+
+<div class="table-container">
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Precio Venta</th>
+                <th>Precio Compra</th>
+                <th>Cantidad</th>
+                <th class="center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto.nombre }}</td>
+                <td>${{ producto.precio_venta }}</td>
+                <td>${{ producto.precio_compra }}</td>
+
+                <td class="{% if producto.stock == 0 %}stock-zero{% endif %}">
+                    {{ producto.stock }}
+                </td>
+
+                <td class="acciones">
+
+                    <a class="btn-icon"href="{{url_for('routes_admin.editar_producto', id_producto=producto.id_producto)}}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </a>
+
+                    <form method="POST"
+                          action="{{url_for('routes_admin.borrar_producto', id_producto=producto.id_producto)}}" onsubmit="return confirm ('¿Deseas eliminar este producto definitivamente?');">
+                        <button type="submit" class="btn-delete">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </form>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

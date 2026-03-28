@@ -1,0 +1,69 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}Panel de Control - Admin{% endblock %}
+
+{% block navbar_categorias %}{% endblock %}
+
+{% block content %}
+<section class="user-panel">
+    <a href="{{ url_for('home') }}" class="back-home-link">
+        <i class="fas fa-home"></i> Volver a la Tienda
+    </a>
+
+    <h1 class="panel-title">Panel de Administración</h1>
+
+    <div class="user-grid">
+        <div class="user-card">
+            <div class="card-body">
+                <div class="card-icon">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="card-info">
+                    <h3>Ver Stock</h3>
+                    <p>Gestionar cantidades y disponibilidad</p>
+                    <a href="{{url_for('routes_admin.inventario')}}" class="card-link">Ir a Inventario</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-card">
+            <div class="card-body">
+                <div class="card-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <div class="card-info">
+                    <h3>Crear Producto</h3>
+                    <p>Subir nuevos artículos a la tienda</p>
+                    <a href="{{url_for('routes_admin.crear_producto')}}" class="card-link">Nuevo Producto</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-card">
+            <div class="card-body">
+                <div class="card-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div class="card-info">
+                    <h3>Gestión de Pedidos</h3>
+                    <p>Administrar ventas, pagos y despachos</p>
+                    <a href="{{url_for('routes_admin.ver_pedidos_admin')}}"class="card-link">Controlar Pedidos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-card">
+            <div class="card-body">
+                <div class="card-icon">
+                    <i class="fas fa-user-cog"></i>
+                </div>
+                <div class="card-info">
+                    <h3>Ver Perfil</h3>
+                    <p>Tus datos de administrador</p>
+                    <a href="{{ url_for('routes_user.perfil') }}" class="card-link">Ir a mi perfil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

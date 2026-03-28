@@ -1,0 +1,45 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}Mi Cuenta{% endblock %}
+
+{% block navbar_categorias %}{% endblock %}
+
+{% block content %}
+<section class="user-panel">
+
+    <a href="{{ url_for('home') }}" class="back-home-link">
+        <i class="fas fa-home"></i> Volver a la Tienda
+    </a>
+
+    <h1 class="panel-title">Mi cuenta</h1>
+
+    <div class="user-grid">
+        <div class="user-card">
+            <div class="card-body">
+                <div class="card-icon">
+                    <i class="far fa-user-circle"></i>
+                </div>
+                <div class="card-info">
+                    <h3>Perfil</h3>
+                    <p>Accede y edita tus datos</p>
+                    <a href="{{ url_for('routes_user.perfil') }}" class="card-link">Ir al perfil</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-card">
+            <div class="card-body">
+                <div class="card-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="card-info">
+                    <h3>Pedidos</h3>
+                    <p>Mira tus anteriores compras</p>
+                    <a href="{{url_for('routes_user.ver_pedidos')}}" class="card-link">Ir a Mis Pedidos</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

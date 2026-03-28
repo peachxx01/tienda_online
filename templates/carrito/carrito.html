@@ -1,0 +1,88 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}Tu carrito{% endblock %}
+
+{% block navbar_categorias %}{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/carrito.css') }}">
+
+<h1 class="carrito-titulo">Tu carrito</h1>
+
+<div class="carrito-container">
+
+    <div class="carrito-items">
+
+        {% if items %}
+            {% for item in items %}
+            <div class="carrito-card">
+
+                <div class="carrito-img">
+                    <img src="{{ url_for('static', filename='uploads/productos/' ~ item.producto.imagen) }}" alt="">
+                </div>
+
+                <div class="carrito-info">
+                    <h3>{{ item.producto.nombre }}</h3>
+                    <p class="descripcion">{{ item.producto.descripcion }}</p>
+
+                    <div class="cantidad-box">
+                        <form method="POST" action="{{ url_for('routes_carrito.disminuir_cantidad', id_item=item.id_carrito_item) }}">
+                            <button type="submit">-</button>
+                        </form>
+
+                        <span>{{ item.cantidad }}</span>
+
+                        <form method="POST" action="{{ url_for('routes_carrito.aumentar_cantidad', id_item=item.id_carrito_item) }}">
+                            <button type="submit">+</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="carrito-precio">
+                    ${{ item.producto.precio_venta * item.cantidad }}
+                </div>
+
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Tu carrito está vacío.</p>
+        {% endif %}
+
+        <a href="{{ url_for('home') }}" class="seguir-comprando">
+            Sigue comprando
+        </a>
+
+    </div>
+
+    <div class="carrito-resumen">
+
+        <h3>RESUMEN DE COMPRA</h3>
+
+        <div class="resumen-items">
+            {% for item in items %}
+                <div class="resumen-linea">
+                    <span>{{ item.producto.nombre }}</span>
+
+                    {% if not item.producto.activo %}
+                        <span class="no-disponible">No disponible</span>
+                    {% else %}
+                        <span>${{ item.producto.precio_venta * item.cantidad }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="resumen-total">
+            TOTAL: ${{ total }}
+        </div>
+
+        <form method="POST" action="{{ url_for('routes_checkout.checkout') }}">
+            <button class="btn-pagar" type="submit">Pagar</button>
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

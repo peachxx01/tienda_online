@@ -1,0 +1,66 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}Detalle del Pedido {% endblock %}
+
+{% block content %}
+<section class="perfil-container">
+    <div class="back-link">
+        <a href="{{ url_for('routes_user.ver_pedidos') }}" class="back-home-link">
+            <i class="fas fa-arrow-left"></i> Volver a mis pedidos
+        </a>
+    </div>
+
+    <h1 class="panel-title">Detalle de Orden #{{ pedido.id_pedido }}</h1>
+
+    <div class="data-card detail-card">
+        
+        {% if pedido.estado.lower() == 'pagado' %}
+        <div class="retiro-banner">
+            <div class="retiro-icon"><i class="fas fa-store"></i></div>
+            <div class="retiro-text">
+                <h3>¡Pedido listo para retirar!</h3>
+                <p>Tu pago ha sido confirmado. Puedes pasar por nuestra sucursal más cercana con tu número de orden y DNI.</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="detail-info-header" style="margin-bottom: 25px;">
+            <div class="status-badge-large status-{{ pedido.estado.lower() }}">
+                Estado: {{ pedido.estado }}
+            </div>
+            <p class="fecha-detalle">Realizado el {{ pedido.fecha | fecha_ar }}hs</p>
+        </div>
+
+        <div class="items-table-container">
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th class="text-center">Precio Unit.</th>
+                        <th class="text-center">Cant.</th>
+                        <th class="text-right">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in pedido.items %}
+                    <tr>
+                        <td>
+                            <strong>{{ item.producto.nombre }}</strong>
+                        </td>
+                        <td class="text-center">${{ item.precio_unitario }}</td>
+                        <td class="text-center">{{ item.cantidad }}</td>
+                        <td class="text-right">${{ item.subtotal }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="3" class="text-right"><strong>TOTAL DE LA COMPRA</strong></td>
+                        <td class="total-amount text-right">${{ pedido.total }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

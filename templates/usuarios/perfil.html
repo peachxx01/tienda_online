@@ -1,0 +1,75 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}Mis Datos{% endblock %}
+
+{% block navbar_categorias %}{% endblock %}
+
+{% block content %}
+<section class="perfil-container">
+    <div class="back-link">
+        {% if session.get('user_rol') == 'admin' %}
+            <a href="{{ url_for('routes_admin.panel') }}" class="back-home-link">
+                <i class="fas fa-chevron-left"></i> Volver al Panel
+            </a>
+        {% else %}
+            <a href="{{ url_for('routes_user.panel') }}" class="back-home-link">
+                <i class="fas fa-chevron-left"></i> Volver al Panel
+            </a>
+        {% endif %}
+    </div>
+
+    <h1 class="panel-title">Mis Datos Personales</h1>
+
+    <div class="data-card">
+        <div class="data-grid">
+            <div class="data-item">
+                <label><i class="fas fa-user"></i> Nombre</label>
+                <p>{{ usuario.nombre }}</p>
+            </div>
+            
+            <div class="data-item">
+                <label><i class="fas fa-signature"></i> Apellido</label>
+                <p>{{ usuario.apellido }}</p>
+            </div>
+
+            <div class="data-item full-width">
+                <label><i class="fas fa-envelope"></i> Email</label>
+                <p>{{ usuario.email }}</p>
+            </div>
+
+            <div class="data-item full-width">
+                <label><i class="fas fa-map-marker-alt"></i> Dirección de Entrega</label>
+                <p>
+                    {% if usuario.direccion %}
+                        {{ usuario.direccion }}
+                    {% else %}
+                        <span style="color: #999; font-style: italic;">No especificada aún</span>
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="data-item full-width">
+                <label><i class="fas fa-phone"></i> Teléfono de Contacto</label>
+                <p>
+                    {% if usuario.telefono %}
+                        {{ usuario.telefono }}
+                    {% else %}
+                        <span style="color: #999; font-style: italic;">No especificado aún</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <a href="{{url_for('routes_user.update_user')}}" class="btn-editar">
+                <i class="fas fa-user-edit"></i> Editar mi Perfil
+            </a>
+            <form action="{{ url_for('routes_auth.logout') }}" method="POST" style="display: inline;">
+                <button type="submit" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

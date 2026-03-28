@@ -1,0 +1,217 @@
+/* auth.css - Versión Final con Home Link Fijo a la Izquierda */
+
+:root {
+    --rosa-principal: #b76e79;
+    --rosa-hover: #9f5c67;
+    --beige-fondo: #f8f5f2;
+    --gris-suave: #e8e3de;
+    --texto-oscuro: #2b2b2b;
+    --blanco: #ffffff;
+    --rojo-error: #c62828;
+    --verde-exito: #2e7d32;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--beige-fondo);
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* ================= HOME LINK: POSICIÓN FIJA ARRIBA IZQ ================= */
+.home-link {
+    position: fixed; /* Esto lo clava en la pantalla */
+    top: 30px;
+    left: 30px;
+    margin: 0;
+    z-index: 100;
+}
+
+.home-link a {
+    text-decoration: none;
+    color: #999;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+    padding: 10px;
+}
+
+.home-link a::before {
+    content: '←';
+    font-size: 1.1rem;
+}
+
+.home-link a:hover {
+    color: var(--rosa-principal);
+    transform: translateX(-5px); /* Efecto sutil de retroceso */
+}
+
+/* ================= CONTENEDOR PRINCIPAL ================= */
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px; /* Espacio por si el flash message aparece */
+}
+
+/* ================= LOGO ================= */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -45px; 
+    position: relative;
+    z-index: 10;
+}
+
+.logo-container img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 20px;
+    background-color: #eee6de; /* Color crema del logo */
+    border: 5px solid var(--blanco);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* ================= CARD ================= */
+.card {
+    background: var(--blanco);
+    padding: 70px 35px 35px;
+    border-radius: 30px;
+    width: 100%;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.04);
+    border: 1px solid var(--gris-suave);
+    box-sizing: border-box;
+}
+
+.card h2 {
+    text-align: center;
+    color: var(--texto-oscuro);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+/* ================= FORMULARIO ================= */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--rosa-principal);
+    font-weight: 600;
+    margin-bottom: 5px;
+    margin-left: 12px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 25px;
+    border: 1px solid var(--gris-suave);
+    background-color: #fafaf9;
+    font-size: 0.95rem;
+    outline: none;
+    box-sizing: border-box;
+    transition: 0.3s;
+}
+
+.form-group input:focus {
+    border-color: var(--rosa-principal);
+    background-color: var(--blanco);
+}
+
+/* ================= BOTÓN ================= */
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--rosa-principal);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+
+button:hover {
+    background-color: var(--rosa-hover);
+    transform: translateY(-2px);
+}
+
+/* ================= LINKS EXTRA ================= */
+.register-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.register-link a {
+    color: var(--rosa-principal);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+/* ================= FLASH MESSAGES ================= */
+.flash-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+}
+
+.flash-message {
+    padding: 14px;
+    border-radius: 12px;
+    color: white;
+    text-align: center;
+    margin-bottom: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.flash-message.success { background-color: var(--verde-exito); }
+.flash-message.error { background-color: var(--rojo-error); }
+
+/* Estilos para el contenedor de contraseña y el ojo */
+.password-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-box input {
+    padding-right: 45px; /* Espacio para que el texto no tape el ojo */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    color: #999;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-password:hover {
+    color: var(--rosa-principal);
+}

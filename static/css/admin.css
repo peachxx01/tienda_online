@@ -1,0 +1,504 @@
+/* ========================================= */
+/* ADMIN STYLE - VIBRAS COSMÉTICA (COMPLETO) */
+/* ========================================= */
+
+:root {
+    --rosa-principal: #b76e79;
+    --rosa-hover: #9f5c67;
+    --beige-fondo: #f8f5f2;
+    --gris-suave: #e8e3de;
+    --texto-oscuro: #2b2b2b;
+    --blanco: #ffffff;
+    --rojo-error: #c62828;
+    --verde-exito: #2e7d32;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--beige-fondo);
+    color: var(--texto-oscuro);
+}
+
+
+.user-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    width: 100%;
+}
+
+.user-card {
+    background: var(--blanco);
+    padding: 30px;
+    border-radius: 25px;
+    border: 1px solid var(--gris-suave);
+    transition: all 0.3s ease;
+}
+
+.user-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.card-body {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.card-icon {
+    width: 65px;
+    height: 65px;
+    background: var(--beige-fondo);
+    color: var(--rosa-principal);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+}
+
+.card-info h3 { margin: 0 0 5px; font-size: 1.25rem; font-weight: 600; }
+.card-info p { margin: 0 0 15px; color: #777; font-size: 0.9rem; line-height: 1.3; }
+
+.card-link {
+    text-decoration: none !important;
+    color: var(--rosa-principal);
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-bottom: none !important;
+    transition: 0.3s;
+}
+
+.card-link:hover {
+    color: var(--rosa-hover);
+    transform: translateX(5px);
+}
+
+/* ========================================= */
+/* HEADER Y BOTÓN VOLVER (INVENTARIO/CREAR)  */
+/* ========================================= */
+
+.admin-header {
+    padding: 30px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--texto-oscuro);
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    text-decoration: none;
+    color: var(--rosa-principal);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border-radius: 50px;
+    background-color: var(--blanco);
+    border: 1px solid var(--gris-suave);
+    transition: 0.3s;
+}
+
+.back-link:hover {
+    background-color: var(--rosa-principal);
+    color: var(--blanco);
+}
+
+/* ========================================= */
+/* TABLAS DE INVENTARIO                      */
+/* ========================================= */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    background: var(--blanco);
+    border-radius: 25px;
+    border: 1px solid var(--gris-suave);
+    margin-bottom: 40px;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.admin-table thead th {
+    text-align: left;
+    padding: 20px 15px;
+    background-color: #fffafb;
+    color: var(--rosa-principal);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    border-bottom: 2px solid var(--gris-suave);
+}
+
+.admin-table td {
+    padding: 18px 15px;
+    border-bottom: 1px solid var(--beige-fondo);
+    vertical-align: middle;
+}
+
+.admin-table tr:hover {
+    background-color: #fffcfd;
+}
+
+.stock-zero {
+    color: var(--rojo-error);
+    font-weight: 700;
+    background: #fff0f0;
+    padding: 5px 12px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+.acciones {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-icon, .btn-delete {
+    background: var(--beige-fondo);
+    border: none;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-icon { color: var(--texto-oscuro); text-decoration: none; }
+.btn-icon:hover { background: var(--rosa-principal); color: white; }
+
+.btn-delete { color: var(--rojo-error); }
+.btn-delete:hover { background: var(--rojo-error); color: white; }
+
+/* ========================================= */
+/* FORMULARIOS (CREAR / EDITAR)              */
+/* ========================================= */
+
+.content-box {
+    background-color: var(--blanco);
+    margin: 20px auto 60px;
+    padding: 40px;
+    border-radius: 30px;
+    max-width: 1000px;
+    width: 95%;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    border: 1px solid var(--gris-suave);
+}
+
+.admin-form { width: 100%; }
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: var(--rosa-principal);
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%; /* Asegura ancho total */
+    padding: 14px 18px;
+    border-radius: 15px;
+    border: 1px solid var(--gris-suave);
+    background-color: #fafaf9;
+    font-size: 0.95rem;
+    transition: 0.3s;
+    outline: none;
+    box-sizing: border-box; /* Crucial para evitar que se corten */
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+    border-color: var(--rosa-principal);
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(183, 110, 121, 0.1);
+}
+
+.full-width { grid-column: 1 / -1; }
+
+.checkbox-group {
+    flex-direction: row !important;
+    align-items: center;
+    gap: 12px;
+    background: #fffafa;
+    padding: 15px;
+    border-radius: 15px;
+    width: fit-content;
+}
+
+.preview-img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 18px;
+    border: 3px solid var(--blanco);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.form-actions {
+    margin-top: 40px;
+    border-top: 1px solid var(--gris-suave);
+    padding-top: 30px;
+    text-align: right;
+}
+
+.btn-primary {
+    background-color: var(--rosa-principal);
+    color: white;
+    padding: 16px 50px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: var(--rosa-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(183, 110, 121, 0.25);
+}
+
+/* ========================================= */
+/* FLASH MESSAGES                            */
+/* ========================================= */
+
+.flash-container {
+    max-width: 500px;
+    margin: 0 auto;
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10000;
+}
+
+.flash-message {
+    padding: 16px 28px;
+    border-radius: 20px;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+.flash-message.success { background-color: var(--verde-exito); }
+.flash-message.error { background-color: var(--rojo-error); }
+.flash-message.danger { background-color: #8b1e1e; }
+
+/* --- SECCIÓN DE PEDIDOS ADMIN (LIMPIO Y CORREGIDO) --- */
+
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+.no-border { border: none !important; box-shadow: none !important; }
+
+/* Vista de Listado */
+.empty-state-admin { text-align: center; padding: 60px 20px; }
+.empty-state-admin i { font-size: 3.5rem; color: var(--gris-suave); margin-bottom: 20px; display: block; }
+.pedido-id-badge { font-weight: 800; color: var(--texto-oscuro); }
+.cliente-info-table { display: flex; flex-direction: column; line-height: 1.2; }
+.cliente-nombre { font-weight: 600; color: var(--texto-oscuro); font-size: 0.95rem; }
+.cliente-email { font-size: 0.8rem; color: #888; }
+.total-col { font-weight: 700; color: var(--rosa-principal); }
+.acciones-flex { display: flex; justify-content: flex-end; }
+
+/* Badges de Estado */
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.status-badge-large {
+    display: block;
+    text-align: center;
+    padding: 15px;
+    border-radius: 15px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.status-pendiente { background: #fff3e0; color: #ef6c00; }
+.status-pagado { background: #e8f5e9; color: #2e7d32; }
+.status-enviado { background: #e3f2fd; color: #1565c0; }
+.status-entregado { background: #f3e5f5; color: #7b1fa2; }
+.status-cancelado { background: #ffebee; color: #c62828; }
+
+/* Grid de Detalle Corregido */
+.admin-detalle-grid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+    max-width: 1100px;
+    margin: 20px auto 80px;
+    padding: 0 25px;
+    align-items: start;
+}
+
+.main-detail {
+    margin: 0 !important;
+    padding: 40px !important;
+    box-sizing: border-box;
+}
+
+.section-title {
+    margin: 0 0 25px 0;
+    color: var(--rosa-principal);
+    border-bottom: 2px solid var(--beige-fondo);
+    padding-bottom: 15px;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.row-total-final td {
+    border-top: 2px solid var(--beige-fondo) !important;
+    padding-top: 30px !important;
+    font-weight: 700;
+    color: var(--texto-oscuro);
+}
+.total-destacado {
+    font-size: 2rem !important;
+    color: var(--rosa-principal);
+    font-weight: 800;
+}
+
+/* Sidebar y Ficha del Cliente */
+.sidebar-detail { display: flex; flex-direction: column; gap: 25px; }
+.sidebar-box { margin: 0 !important; padding: 30px !important; width: 100%; box-sizing: border-box; }
+.sidebar-title { margin-bottom: 25px; font-size: 1.15rem; font-weight: 700; color: var(--texto-oscuro); display: flex; align-items: center; gap: 10px; }
+
+.dato-grupo {
+    margin-bottom: 22px;
+    border-left: 3px solid var(--beige-fondo);
+    padding-left: 15px;
+}
+.dato-grupo label { display: block; font-size: 0.7rem; color: #b0b0b0; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; letter-spacing: 0.8px; }
+.dato-grupo p { margin: 0; font-size: 1rem; font-weight: 600; color: var(--texto-oscuro); }
+.direccion-texto { line-height: 1.5; font-size: 0.95rem; }
+
+.status-box { border-top: 5px solid var(--rosa-principal) !important; background: #fffafa; }
+.fecha-timestamp { text-align: center; font-size: 0.85rem; color: #888; margin-top: 15px; }
+.error-msg { color: var(--rojo-error); font-style: italic; text-align: center; }
+
+/* Responsive */
+@media (max-width: 1100px) {
+    .admin-detalle-grid { grid-template-columns: 1fr; }
+    .sidebar-detail { order: -1; }
+}
+
+.filtros-pedidos {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.filtros-pedidos a {
+    padding: 10px 20px;
+    border-radius: 50px;
+    background: var(--blanco);
+    border: 1px solid var(--gris-suave);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--rosa-principal);
+    transition: 0.3s;
+}
+
+.filtros-pedidos a:hover {
+    background: var(--rosa-principal);
+    color: white;
+}
+
+/* ========================================= */
+/* BOTONES DE ACCIONES DE PEDIDO             */
+/* ========================================= */
+
+.acciones-pedido {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-action {
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 15px;
+    border: 1px solid var(--gris-suave);
+    background-color: var(--blanco);
+    color: var(--texto-oscuro);
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+}
+
+.btn-pagado {
+    border-color: var(--rosa-principal);
+    color: var(--rosa-principal);
+}
+
+.btn-pagado:hover {
+    background-color: var(--rosa-principal);
+    color: white;
+}
+
+.btn-entregado {
+    border-color: var(--verde-exito);
+    color: var(--verde-exito);
+}
+
+.btn-entregado:hover {
+    background-color: var(--verde-exito);
+    color: white;
+}
+
+.btn-cancelar {
+    border-color: var(--rojo-error);
+    color: var(--rojo-error);
+}
+
+.btn-cancelar:hover {
+    background-color: var(--rojo-error);
+    color: white;
+}

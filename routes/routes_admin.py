@@ -1,0 +1,302 @@
+import os
+import uuid
+from sqlalchemy import exists, and_
+from flask import Blueprint, request, redirect, url_for, render_template, flash, current_app
+from werkzeug.utils import secure_filename
+from models.db import db
+from models.producto import Producto
+from models.categoria import Categoria
+from models.pedidoItem import PedidoItem
+from models.pedido import Pedido
+from utils.decorators import login_required, admin_required
+from services.pedido_service import cambiar_estado_pedido
+
+routes_admin=Blueprint('routes_admin', __name__, url_prefix='/admin')
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@routes_admin.route('/panel')
+@login_required
+@admin_required
+def panel():
+    return render_template('admin/panel_admin.html')
+
+
+@routes_admin.route('/stock')
+@login_required
+@admin_required
+def inventario():
+
+    categoria_id = request.args.get("categoria", type=int)
+
+    query = Producto.query.filter_by(activo=True)
+
+    if categoria_id:
+        query = query.filter(Producto.categoria_id == categoria_id)
+
+    productos = query.order_by(Producto.id_producto.desc()).all()
+
+    categorias = Categoria.query.all()
+
+    return render_template(
+        'admin/stock.html',
+        productos=productos,
+        categorias=categorias
+    )
+
+
+@routes_admin.route('/borrar/<int:id_producto>', methods=['POST'])
+@login_required
+@admin_required
+def borrar_producto(id_producto):
+    producto = Producto.query.get_or_404(id_producto)
+
+    # 🚫 bloquear si está en pedidos pendientes o pagados
+    existe_bloqueante = db.session.query(
+        exists().where(
+            and_(
+                PedidoItem.producto_id == id_producto,
+                Pedido.id_pedido == PedidoItem.pedido_id,
+                Pedido.estado.in_(["pendiente", "pagado"])
+            )
+        )
+    ).scalar()
+
+    if existe_bloqueante:
+        flash(
+            "No se puede eliminar el producto porque está en pedidos pendientes o ya pagados.",
+            "danger"
+        )
+        return redirect(request.referrer)
+
+    # 🖼️ eliminar imagen
+    if producto.imagen:
+        ruta_imagen = os.path.join(
+            current_app.root_path,
+            'static/uploads/productos',
+            producto.imagen
+        )
+        if os.path.exists(ruta_imagen):
+            os.remove(ruta_imagen)
+
+    # 🔁 soft delete
+    producto.activo = False
+    db.session.commit()
+
+    flash("Producto eliminado correctamente", "success")
+    return redirect(url_for('routes_admin.inventario'))
+
+@routes_admin.route('/crear', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def crear_producto():
+
+    if request.method == 'POST':
+        nombre= request.form.get('nombre')
+        descripcion=request.form.get('descripcion')
+        categoria_id=request.form.get('categoria_id')
+        popular='popular' in request.form
+
+        try:
+            precio_venta=float(request.form.get('precio_venta'))
+            precio_compra= float(request.form.get('precio_compra'))
+            stock=int(request.form.get('stock'))
+        except (ValueError, TypeError):
+            flash("Datos numéricos inválidos", "error")
+            return redirect(request.url)
+        
+        if precio_venta<0 or precio_compra<0:
+            flash("Los precios no pueden ser negativos", "error")
+            return redirect(request.url)
+        
+        if stock<0:
+            flash("El stock no puede ser negativo", "error")
+            return redirect(request.url)
+        
+        if stock>10000:
+            flash("Cantidad muy grande de stock", "error")
+            return redirect(request.url)
+
+        if precio_venta<precio_compra:
+            flash("El precio de venta no puede ser menos al de compra", "warning")
+            return redirect(request.url)
+        
+        imagen_file=request.files.get('imagen')
+        nombre_imagen= None
+
+        #Guardar imagen con nombre unico
+        if imagen_file and imagen_file.filename !='':
+            if allowed_file(imagen_file.filename):
+                extension = os.path.splitext(imagen_file.filename)[1]
+                #Se saca la extension del archivo ya que el nombre se le da con uuid
+                nombre_unico= f"{uuid.uuid4().hex}{extension}"
+                filename= secure_filename(nombre_unico)
+                ruta=os.path.join(current_app.root_path, 'static/uploads/productos', filename)
+                imagen_file.save(ruta)
+                nombre_imagen=filename
+            else:
+                flash("Formato de imagen no permitido (solo jpg, jpeg, png)", "danger")
+                return redirect(request.url)
+        
+        nuevo_producto=Producto(
+            nombre=nombre,
+            precio_venta=float(precio_venta),
+            precio_compra=float(precio_compra),
+            descripcion=descripcion,
+            stock=int(stock),
+            categoria_id=int(categoria_id),
+            popular=popular,
+            imagen=nombre_imagen
+        )
+
+        db.session.add(nuevo_producto)
+        db.session.commit()
+
+        flash ("Producto creado correctamente", "success")
+        return redirect(url_for('routes_admin.panel'))
+    
+    categorias=Categoria.query.all()
+    return render_template('admin/crear_producto.html', categorias=categorias)
+
+
+@routes_admin.route('/editar/<int:id_producto>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def editar_producto(id_producto):
+    producto=Producto.query.get_or_404(id_producto)
+
+    if request.method=='POST':
+        producto.nombre= request.form.get('nombre')
+        producto.descripcion= request.form.get('descripcion')
+        producto.categoria_id=int(request.form.get('categoria_id'))
+        producto.popular='popular' in request.form
+
+        try:
+            producto.precio_venta= float(request.form.get('precio_venta'))
+            producto.precio_compra= float(request.form.get('precio_compra'))
+            producto.stock=int(request.form.get('stock'))
+        except (ValueError, TypeError):
+            flash("Datos numéricos inválidos", "error")
+            return redirect(request.url)
+        
+        if producto.precio_venta<0 or producto.precio_compra<0:
+            flash("Los precios no pueden ser negativos", "error")
+            return redirect(request.url)
+        
+        if producto.stock<0:
+            flash("El stock no puede ser negativo", "error")
+            return redirect(request.url)
+        
+        if producto.stock>10000:
+            flash("Cantidad muy grande de stock", "error")
+            return redirect(request.url)
+
+        if producto.precio_venta<producto.precio_compra:
+            flash("El precio de venta no puede ser menos al de compra", "warning")
+            return redirect(request.url)
+
+        imagen_file=request.files.get('imagen')
+
+        if imagen_file and imagen_file.filename !='':
+            if allowed_file(imagen_file.filename):
+                if producto.imagen:
+                    ruta_anterior=os.path.join(current_app.root_path, 'static/uploads/productos', producto.imagen)
+
+                    if os.path.exists(ruta_anterior):
+                        os.remove(ruta_anterior)
+            
+                    extension=os.path.splitext(imagen_file.filename)[1]
+                    nombre_unico= f"{uuid.uuid4().hex}{extension}"
+                    filename=secure_filename(nombre_unico)
+                    ruta=os.path.join(current_app.root_path, 'static/uploads/productos', filename)
+                    imagen_file.save(ruta)
+                    producto.imagen=filename
+            else:
+                flash("Formato de imagen no permitido", "danger")
+                return redirect(request.url)
+        
+        db.session.commit()
+
+        flash("Producto actualizado correctamente", "success")
+        return redirect(url_for('routes_admin.panel'))
+    
+    categorias=Categoria.query.all()
+    return render_template('admin/editar_producto.html', producto=producto, categorias=categorias)
+
+
+@routes_admin.route('/pedidos')
+@login_required
+@admin_required
+def ver_pedidos_admin():
+
+    estado = request.args.get('estado')  # lee ?estado=...
+
+    query = Pedido.query
+
+    estados_validos = ['pendiente', 'pagado', 'entregado', 'cancelado']
+
+    if estado and estado.lower() in estados_validos:
+        query = query.filter(Pedido.estado.ilike(estado))
+
+    pedidos = query.order_by(Pedido.fecha.desc()).all()
+
+    if not pedidos:
+        return render_template(
+            'admin/ver_pedidos_admin.html',
+            pedidos=[],
+            mensaje="No hay pedidos con ese estado."
+        )
+
+    return render_template(
+        'admin/ver_pedidos_admin.html',
+        pedidos=pedidos,
+        estado_actual=estado
+    )
+
+@routes_admin.route('/pedido/detalle/<int:pedido_id>')
+@login_required
+@admin_required
+def detalle_pedido_admin(pedido_id):
+    pedido = Pedido.query.get_or_404(pedido_id)
+
+    return render_template('admin/detalle_pedido_admin.html', pedido=pedido)
+
+
+@routes_admin.route('/pedido/<int:pedido_id>/estado', methods=['POST'])
+@login_required
+@admin_required
+def cambiar_estado_admin(pedido_id):
+    pedido= Pedido.query.get_or_404(pedido_id)
+    nuevo_estado = request.form.get("estado")
+
+    ok, mensaje= cambiar_estado_pedido(pedido, nuevo_estado)
+
+    if not ok:
+        db.session.rollback()
+        flash(mensaje, "error")
+    else:
+        db.session.commit()
+        flash(mensaje, "success")
+    
+    return redirect(url_for('routes_admin.detalle_pedido_admin', pedido_id=pedido_id))
+
+
+@routes_admin.route('/reset-db')
+@login_required
+@admin_required
+def reset_db():
+    try:
+        db.drop_all()
+        db.create_all()
+
+        return "Base de datos reiniciada correctamente", 200
+
+    except Exception as e:
+        db.session.rollback()
+        print("Error al resetear DB:", e)
+        return "Error al reiniciar la base de datos", 500

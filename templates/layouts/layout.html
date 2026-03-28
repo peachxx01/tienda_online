@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/usuarios.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="header-top">
+        <div class="logo">
+            <a href="{{ url_for('home') }}" class="logo-text">
+                Vibras
+            </a>
+        </div>
+
+        <!-- BUSCADOR -->
+        <div class="search-container">
+            <form action="{{url_for('routes_productos.buscar')}}" method="get" class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" name="q" placeholder="Buscá tu producto">
+                <button type="submit" style="display:none;"></button>
+            </form>
+        </div>
+
+        <!-- ICONOS -->
+        <div class="icons">
+            <a href="{{url_for('routes_carrito.ver_carrito')}}"><i class="fas fa-shopping-cart"></i></a>
+            {% if session.get('user_id') %}
+                {# PRIMER CASO: Está logueado y es ADMIN #}
+                {% if session.get('user_rol') == 'admin' %}
+                    <a href="{{ url_for('routes_admin.panel') }}" title="Panel de Control">
+                        <i class="fas fa-user-shield"></i> </a>
+                {# SEGUNDO CASO: Está logueado pero es USUARIO común #}
+                {% else %}
+                    <a href="{{ url_for('routes_user.panel') }}" title="Mi Cuenta">
+                        <i class="fas fa-user"></i>
+                    </a>
+                {% endif %}
+            {% else %}
+                <a href="{{ url_for('routes_user.panel') }}" title="Iniciar Sesión">
+                    <i class="fas fa-user"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- NAV CATEGORÍAS -->
+    {% block navbar_categorias %}
+        <nav class="navbar">
+        {% for categoria in categorias %}
+            <a href="{{ url_for('routes_categorias.productos_por_categoria', slug=categoria.slug) }}">
+                {{ categoria.nombre }}
+            </a>
+        {% endfor %}
+        </nav>
+    {% endblock %}
+
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+
+        <div class="footer-brand">
+            <h3>Vibras</h3>
+            <p>Maquillaje & Cosmética</p>
+        </div>
+
+        <div class="footer-contact">
+            <p>Email: contacto@vibrasbeauty.com</p>
+            <p>Tel: +54 11 2345-6789</p>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>© 2026 Vibras. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script>
+    setTimeout(() => {
+        const flashes = document.querySelectorAll('.flash-message');
+        flashes.forEach(flash => {
+            flash.style.opacity = '0';
+            setTimeout(() => flash.remove(), 300);
+        });
+    }, 3000);
+</script>
+
+</body>
+</html>

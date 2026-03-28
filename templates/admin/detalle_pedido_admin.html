@@ -1,0 +1,125 @@
+{% extends "layouts/layout_admin.html" %}
+
+{% block title %}Detalle Pedido{% endblock %}
+
+{% block admin_header%}{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <a href="{{ url_for('routes_admin.ver_pedidos_admin') }}" class="back-link">
+        <i class="fas fa-chevron-left"></i> Volver a Pedidos
+    </a>
+    <h1>Detalle de Orden #{{ pedido.id_pedido }}</h1>
+</div>
+
+<div class="admin-detalle-grid">
+    
+    <section class="content-box main-detail">
+        <h3 class="section-title"><i class="fas fa-shopping-cart"></i> Productos Solicitados</h3>
+        
+        <div class="table-container no-border">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>P. Unit</th>
+                        <th class="text-center">Cant.</th>
+                        <th class="text-right">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in pedido.items %}
+                    <tr>
+                        <td><strong>{{ item.producto.nombre }}</strong></td>
+                        <td>${{ item.precio_unitario }}</td>
+                        <td class="text-center">{{ item.cantidad }}</td>
+                        <td class="text-right"><strong>${{ item.subtotal }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="row-total-final">
+                        <td colspan="3" class="text-right">TOTAL DE LA ORDEN:</td>
+                        <td class="text-right total-destacado">${{ pedido.total }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </section>
+
+    <aside class="sidebar-detail">
+        <div class="content-box sidebar-box">
+            <h3 class="sidebar-title"><i class="fas fa-user-circle"></i> Ficha del Cliente</h3>
+            {% if pedido.usuario %}
+                <div class="ficha-cliente">
+                    <div class="dato-grupo">
+                        <label>Nombre Completo</label>
+                        <p>{{ pedido.usuario.nombre }} {{ pedido.usuario.apellido }}</p>
+                    </div>
+                    <div class="dato-grupo">
+                        <label>Email</label>
+                        <p>{{ pedido.usuario.email }}</p>
+                    </div>
+                    <div class="dato-grupo">
+                        <label>Teléfono</label>
+                        <p>{{ pedido.usuario.telefono or 'No registrado' }}</p>
+                    </div>
+                    <div class="dato-grupo">
+                        <label>Dirección de Envío</label>
+                        <p class="direccion-texto">{{ pedido.usuario.direccion or 'Retiro en local' }}</p>
+                    </div>
+                </div>
+            {% else %}
+                <p class="error-msg">Datos de usuario no disponibles.</p>
+            {% endif %}
+        </div>
+
+        <div class="content-box sidebar-box status-box">
+            <h3 class="sidebar-title"><i class="fas fa-cog"></i> Estado Actual</h3>
+            <div class="status-display">
+                <span class="status-badge-large status-{{ pedido.estado.lower() }}">
+                    {{ pedido.estado }}
+                </span>
+                <p class="fecha-timestamp">Registrado: {{ pedido.fecha | fecha_ar }}hs</p>
+            </div>
+            <div class="acciones-pedido">
+
+                {% if pedido.estado == "pendiente" %}
+        
+                    <form method="POST" action="{{ url_for('routes_admin.cambiar_estado_admin', pedido_id=pedido.id_pedido) }}">
+                        <input type="hidden" name="estado" value="pagado">
+                        <button class="btn-action btn-pagado">
+                            Marcar como pagado
+                        </button>
+                    </form>
+
+                    <form method="POST" action="{{ url_for('routes_admin.cambiar_estado_admin', pedido_id=pedido.id_pedido) }}">
+                        <input type="hidden" name="estado" value="cancelado">
+                            <button class="btn-action btn-cancelar">
+                                Cancelar pedido
+                            </button>
+                    </form>
+
+                {% elif pedido.estado == "pagado" %}
+
+                    <form method="POST" action="{{ url_for('routes_admin.cambiar_estado_admin', pedido_id=pedido.id_pedido) }}">
+                        <input type="hidden" name="estado" value="entregado">
+                        <button class="btn-action btn-entregado">
+                                Marcar como entregado
+                        </button>
+                    </form>
+
+                    <form method="POST" action="{{ url_for('routes_admin.cambiar_estado_admin', pedido_id=pedido.id_pedido) }}">
+                        <input type="hidden" name="estado" value="cancelado">
+                        <button class="btn-action btn-cancelar">
+                            ✖ Cancelar pedido
+                        </button>
+                    </form>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}Resultados de búsqueda{% endblock %}
+
+{% block content %}
+
+<section class="productos-populares">
+
+    <h2>
+        Resultados para
+        <span class="search-query">"{{ q }}"</span>
+    </h2>
+
+    {% if productos %}
+        <div class="grid-productos">
+            {% for producto in productos %}
+                <div class="card-producto">
+                    <a href="{{ url_for('routes_productos.detalle_producto', id_producto=producto.id_producto) }}" class="card-link">
+                        {% if producto.imagen %}
+                            <img src="{{ url_for('static', filename='uploads/productos/' ~ producto.imagen) }}" alt="{{ producto.nombre }}">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/no-image.png') }}" alt="Sin imagen">
+                        {% endif %}
+                        <h3>{{ producto.nombre }}</h3>
+                        <p class="precio">${{ producto.precio_venta }}</p>
+                    </a>
+
+                    <form action="{{ url_for('routes_carrito.agregar_al_carrito', id_producto=producto.id_producto) }}" method="POST">
+                        <button type="submit" class="btn-agregar">Agregar al carrito</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No se encontraron productos para tu búsqueda</p>
+    {% endif %}
+
+</section>
+
+{% endblock %}

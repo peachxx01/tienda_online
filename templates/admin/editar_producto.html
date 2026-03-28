@@ -1,0 +1,88 @@
+{% extends "layouts/layout_admin.html" %}
+
+{% block title %}Editar Producto{% endblock %}
+{% block page_title %}Editar Producto{% endblock %}
+
+{% block content %}
+
+<form method="POST" enctype="multipart/form-data" class="admin-form">
+
+    <div class="form-grid">
+
+        <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" name="nombre"
+                   value="{{ producto.nombre }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Precio Venta</label>
+            <input type="number" step="0.01" name="precio_venta"
+                   value="{{ producto.precio_venta }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Precio Compra</label>
+            <input type="number" step="0.01" name="precio_compra"
+                   value="{{ producto.precio_compra }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Stock</label>
+            <input type="number" name="stock"
+                   value="{{ producto.stock }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Categoría</label>
+            <select name="categoria_id" required>
+                {% for categoria in categorias %}
+                    <option value="{{ categoria.id_categoria }}"
+                        {% if categoria.id_categoria == producto.categoria_id %}
+                            selected
+                        {% endif %}>
+                        {{ categoria.nombre }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group full-width">
+            <label>Descripción</label>
+                <textarea name="descripcion" rows="4">
+                    {{ producto.descripcion }}
+                </textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Imagen actual</label><br>
+            {% if producto.imagen %}
+                <img src="{{ url_for('static', filename='uploads/productos/' ~ producto.imagen) }}"
+                     class="preview-img">
+            {% else %}
+                Sin imagen
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label>Cambiar imagen</label>
+            <input type="file" name="imagen" accept=".jpg,.jpeg,.png">
+        </div>
+
+        <div class="form-group checkbox-group">
+            <input type="checkbox" name="popular"
+                {% if producto.popular %}checked{% endif %}>
+            <label>Producto popular</label>
+        </div>
+
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn-primary">
+            Actualizar Producto
+        </button>
+    </div>
+
+</form>
+
+{% endblock %}

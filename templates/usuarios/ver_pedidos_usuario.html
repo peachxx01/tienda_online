@@ -1,0 +1,43 @@
+{% extends "layouts/layout.html" %}
+
+{% block title %}Mis Pedidos{% endblock %}
+
+{% block content %}
+<section class="perfil-container">
+    <div class="back-link">
+        <a href="{{ url_for('routes_user.panel') }}" class="back-home-link">
+            <i class="fas fa-chevron-left"></i> Volver al Panel
+        </a>
+    </div>
+
+    <h1 class="panel-title">Mis Pedidos</h1>
+
+    {% if not pedidos %}
+    <div class="data-card empty-state">
+        <div class="card-icon" style="margin: 0 auto 20px;"><i class="fas fa-shopping-bag"></i></div>
+        <p>Aún no has realizado ninguna compra.</p>
+        <a href="{{ url_for('home') }}" class="btn-editar">Ir a la Tienda</a>
+    </div>
+    {% else %}
+    <div class="pedidos-list">
+        {% for pedido in pedidos %}
+        <div class="pedido-card">
+            <div class="pedido-header">
+                <span class="pedido-id">Orden #{{ pedido.id_pedido }}</span>
+                <span class="pedido-status status-{{ pedido.estado.lower() }}">{{ pedido.estado }}</span>
+            </div>
+            <div class="pedido-body">
+                <div class="pedido-info">
+                    <p class="pedido-fecha">{{ pedido.fecha | fecha_ar }}</p>
+                    <p class="pedido-total">Total: <strong>${{ pedido.total }}</strong></p>
+                </div>
+                <a href="{{ url_for('routes_user.detalle_pedido', pedido_id=pedido.id_pedido) }}" class="btn-detalle">
+                    Ver detalle <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

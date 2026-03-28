@@ -1,0 +1,76 @@
+{% extends "layouts/layout_admin.html" %}
+
+{% block title %}Gestión de Pedidos{% endblock %}
+
+{% block admin_header%}{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <a href="{{ url_for('routes_admin.panel') }}" class="back-link">
+        <i class="fas fa-arrow-left"></i> Volver al Panel
+    </a>
+    <h1>Gestión de Pedidos</h1>
+</div>
+
+<div class="content-box">
+    <div class="filtros-pedidos">
+        <a href="{{ url_for('routes_admin.ver_pedidos_admin') }}">Todos</a>
+        <a href="{{ url_for('routes_admin.ver_pedidos_admin', estado='pendiente') }}">Pendientes</a>
+        <a href="{{ url_for('routes_admin.ver_pedidos_admin', estado='pagado') }}">Pagados</a>
+        <a href="{{ url_for('routes_admin.ver_pedidos_admin', estado='entregado') }}">Entregados</a>
+        <a href="{{ url_for('routes_admin.ver_pedidos_admin', estado='rechazado') }}">Rechazados</a>
+    </div>
+    {% if not pedidos %}
+        <div class="empty-state-admin">
+            <i class="fas fa-box-open"></i>
+            <p>{{ mensaje }}</p>
+        </div>
+    {% else %}
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha y Hora</th>
+                        <th>Cliente</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th class="text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                    <tr>
+                        <td><span class="pedido-id-badge">#{{ pedido.id_pedido }}</span></td>
+                        <td>{{ pedido.fecha | fecha_ar }}</td>
+                        <td>
+                            {% if pedido.usuario %}
+                                <div class="cliente-info-table">
+                                    <span class="cliente-nombre">{{ pedido.usuario.nombre }} {{ pedido.usuario.apellido }}</span>
+                                    <span class="cliente-email">{{ pedido.usuario.email }}</span>
+                                </div>
+                            {% else %}
+                                <span class="usuario-eliminado">Usuario no disponible</span>
+                            {% endif %}
+                        </td>
+                        <td class="total-col">${{ pedido.total }}</td>
+                        <td>
+                            <span class="status-badge status-{{ pedido.estado.lower() }}">
+                                {{ pedido.estado }}
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <div class="acciones-flex">
+                                <a href="{{ url_for('routes_admin.detalle_pedido_admin', pedido_id=pedido.id_pedido) }}" class="btn-icon" title="Ver Detalle">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
