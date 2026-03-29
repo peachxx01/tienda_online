@@ -25,12 +25,11 @@ app = Flask(__name__)
 app.config.from_object(config)
 
 
-db.init_app(app)
+#db.init_app(app)
 
-with app.app_context():
+#with app.app_context():
     #db.drop_all()
     #db.create_all()
-    pass
    
 
 #Filtro de horas para cambiar las utc a horario argentino
@@ -74,6 +73,9 @@ app.register_blueprint(routes_admin)
 app.register_blueprint(routes_carrito)
 app.register_blueprint(routes_checkout)
 
+@app.route('/health')
+def health():
+    return "App viva", 200
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
