@@ -7,7 +7,7 @@ load_dotenv()
 user = os.getenv('MYSQLUSER')      
 password = os.getenv('MYSQLPASSWORD') 
 host = os.getenv('MYSQLHOST')      
-database = os.getenv('MYSQLDB')    
+database = os.getenv('MYSQLDATABASE')    
 port = os.getenv('MYSQLPORT', '3306') 
 
 # Construcción de la URI
