@@ -1,4 +1,5 @@
 from flask import Flask, render_template, flash, request, redirect
+import os
 from werkzeug.exceptions import RequestEntityTooLarge
 from datetime import timedelta
 from models.db import db
@@ -73,5 +74,7 @@ app.register_blueprint(routes_admin)
 app.register_blueprint(routes_carrito)
 app.register_blueprint(routes_checkout)
 
+
 if __name__ == '__main__':
-    app.run(debug=True, use_reloader=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
