@@ -1,22 +1,22 @@
 from flask import Flask, render_template, flash, request, redirect
 import os
-from werkzeug.exceptions import RequestEntityTooLarge
-from datetime import timedelta
-from models.db import db
-from models.usuario import Usuario
-from models.producto import Producto
-from models.carrito import Carrito
-from models.carritoItem import CarritoItem
-from models.pedido import Pedido
-from models.pedidoItem import PedidoItem
-from models.categoria import Categoria
-from routes.routes_categorias import routes_categorias
-from routes.routes_productos import routes_productos
-from routes.routes_auth import routes_auth
-from routes.routes_user import routes_user
-from routes.routes_admin import routes_admin
-from routes.routes_carrito import routes_carrito
-from routes.routes_checkout import routes_checkout
+#from werkzeug.exceptions import RequestEntityTooLarge
+#from datetime import timedelta
+#from models.db import db
+#from models.usuario import Usuario
+#from models.producto import Producto
+#from models.carrito import Carrito
+#from models.carritoItem import CarritoItem
+#from models.pedido import Pedido
+#from models.pedidoItem import PedidoItem
+#from models.categoria import Categoria
+#from routes.routes_categorias import routes_categorias
+#from routes.routes_productos import routes_productos
+#from routes.routes_auth import routes_auth
+#from routes.routes_user import routes_user
+#from routes.routes_admin import routes_admin
+#from routes.routes_carrito import routes_carrito
+#from routes.routes_checkout import routes_checkout
 
 import config.config as config
 
@@ -33,7 +33,7 @@ app.config.from_object(config)
    
 
 #Filtro de horas para cambiar las utc a horario argentino
-@app.template_filter('fecha_ar')
+"""@app.template_filter('fecha_ar')
 def fecha_ar(fecha):
     if fecha:
         fecha_local = fecha - timedelta(hours=3)
@@ -73,6 +73,7 @@ app.register_blueprint(routes_admin)
 app.register_blueprint(routes_carrito)
 app.register_blueprint(routes_checkout)
 
+"""
 @app.route('/health')
 def health():
     return "App viva", 200
