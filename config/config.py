@@ -4,11 +4,11 @@ import os
 load_dotenv()
 
 # Nombres exactos según tu lista de Railway
-user = os.getenv('MYSQL_USER')      
-password = os.getenv('MYSQL_PASSWORD') 
-host = os.getenv('MYSQL_HOST')      
-database = os.getenv('MYSQL_DB')    
-port = os.getenv('MYSQL_PORT', '3306') 
+user = os.getenv('MYSQLUSER')      
+password = os.getenv('MYSQLPASSWORD') 
+host = os.getenv('MYSQLHOST')      
+database = os.getenv('MYSQLDB')    
+port = os.getenv('MYSQLPORT', '3306') 
 
 # Construcción de la URI
 DATABASE_CONNECTION_URI = f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}"
