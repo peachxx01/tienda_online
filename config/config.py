@@ -1,15 +1,17 @@
 import os
 
-# Leemos directamente de Railway (sin guiones bajos)
-user = os.getenv('MYSQLUSER')      
-password = os.getenv('MYSQLPASSWORD') 
-host = os.getenv('MYSQLHOST')      
-database = os.getenv('MYSQLDATABASE')    
-port_db = os.getenv('MYSQLPORT', '3306') 
+# Forzamos la obtención de las variables
+user = os.environ.get('MYSQLUSER')      
+password = os.environ.get('MYSQLPASSWORD') 
+host = os.environ.get('MYSQLHOST')      
+database = os.environ.get('MYSQLDATABASE')    
+port_db = os.environ.get('MYSQLPORT', '3306') 
 
-# Si alguna variable falta, usamos valores por defecto para que no sea 'None'
+# DEBUG: Esto nos dirá en el log de Railway si las variables están llegando
 if not host:
-    host = "localhost" # Esto es solo para que no explote si no hay host
+    print("--- ERROR: NO SE ENCONTRÓ MYSQLHOST EN LAS VARIABLES ---")
+else:
+    print(f"--- CONECTANDO A HOST: {host} ---")
 
 # Construcción de la URI
 SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{user}:{password}@{host}:{port_db}/{database}"
@@ -17,7 +19,6 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 MAX_CONTENT_LENGTH = 2 * 1024 * 1024 
 
-# Nombres exactos de tus variables en Railway
-SECRET_KEY = os.getenv("SECRETKEY") 
-MP_ACCESS_TOKEN = os.getenv("MP_ACCESS_TOKEN")
-BASE_URL = os.getenv("BASE_URL")
+SECRET_KEY = os.environ.get("SECRETKEY") 
+MP_ACCESS_TOKEN = os.environ.get("MP_ACCESS_TOKEN")
+BASE_URL = os.environ.get("BASE_URL")
