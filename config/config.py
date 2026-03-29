@@ -3,12 +3,13 @@ import os
 
 load_dotenv()
 
-user= os.getenv('MYSQL_USER')
-password=os.getenv('MYSQL_PASSWORD')
-host=os.getenv('MYSQL_HOST')
-database=os.getenv('MYSQL_DB')
+user= os.getenv('MYSQLUSER')
+password=os.getenv('MYSQLPASSWORD')
+host=os.getenv('MYSQLHOST')
+database=os.getenv('MYSQLDATABASE')
+port = os.getenv('MYSQLPORT', '3306')
 
-DATABASE_CONNECTION_URI=f"mysql+pymysql://{user}:{password}@{host}/{database}"
+DATABASE_CONNECTION_URI = f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}"
 
 MAX_CONTENT_LENGTH= 2*1024*1024 #2MB Máximo, va al handler de app
 
