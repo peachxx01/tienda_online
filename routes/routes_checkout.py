@@ -34,9 +34,15 @@ def checkout():
         
         total=sum(item.producto.precio_venta*item.cantidad for item in carrito.items)
 
-        pedido=Pedido(usuario_id=usuario_id, total=total, estado="pendiente")
-        db.session.add(pedido)
-        db.session.flush()#Es como un commit temporal
+        pedido=Pedido.query.filter_by(usuario_id=usuario_id, estado="pendiente").first()
+
+        if not pedido:
+            pedido=Pedido(usuario_id=usuario_id,total=total, estado="pendiente")
+            db.session.add(pedido)
+            db.session.flush()#commit temporal para poder usar pedido_id
+        else:
+            pedido.total=total
+            PedidoItem.query.filter_by(pedido_id=pedido.id_pedido).delete()
 
         for item in carrito.items:
             subtotal_item = item.producto.precio_venta * item.cantidad
@@ -51,12 +57,11 @@ def checkout():
             )
             db.session.add(pedido_item)
 
-        db.session.commit()
-        
         init_point = crear_preferencia(pedido)
 
+        db.session.commit()
+
         return redirect(init_point)
-    
     except Exception as e:
         db.session.rollback()
         print(e)

@@ -23,11 +23,7 @@ def buscar():
             ).limit(20).all()
         )
 
-    return render_template(
-        'productos/resultados_busqueda.html',
-        productos=productos,
-        q=q
-    )
+    return render_template('productos/resultados_busqueda.html',productos=productos,q=q)
 
 @routes_productos.route('/detalle/<int:id_producto>')
 def detalle_producto(id_producto):

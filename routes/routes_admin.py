@@ -56,7 +56,6 @@ def inventario():
 def borrar_producto(id_producto):
     producto = Producto.query.get_or_404(id_producto)
 
-    # 🚫 bloquear si está en pedidos pendientes o pagados
     existe_bloqueante = db.session.query(
         exists().where(
             and_(
@@ -74,7 +73,6 @@ def borrar_producto(id_producto):
         )
         return redirect(request.referrer)
 
-    # 🖼️ eliminar imagen
     if producto.imagen:
         ruta_imagen = os.path.join(
             current_app.root_path,
@@ -84,7 +82,7 @@ def borrar_producto(id_producto):
         if os.path.exists(ruta_imagen):
             os.remove(ruta_imagen)
 
-    # 🔁 soft delete
+    #soft delete
     producto.activo = False
     db.session.commit()
 
