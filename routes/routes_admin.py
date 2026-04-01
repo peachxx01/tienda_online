@@ -274,7 +274,7 @@ def cambiar_estado_admin(pedido_id):
     
     return redirect(url_for('routes_admin.detalle_pedido_admin', pedido_id=pedido_id))
 
-
+@routes_admin.route('/reset-db')
 def reset_db():
     try:
         db.session.execute("SET FOREIGN_KEY_CHECKS=0")
