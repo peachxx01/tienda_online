@@ -18,7 +18,7 @@
         <a href="{{ url_for('routes_admin.ver_pedidos_admin', estado='pendiente') }}">Pendientes</a>
         <a href="{{ url_for('routes_admin.ver_pedidos_admin', estado='pagado') }}">Pagados</a>
         <a href="{{ url_for('routes_admin.ver_pedidos_admin', estado='entregado') }}">Entregados</a>
-        <a href="{{ url_for('routes_admin.ver_pedidos_admin', estado='rechazado') }}">Rechazados</a>
+        <a href="{{ url_for('routes_admin.ver_pedidos_admin', estado='cancelado') }}">Canceladoss</a>
     </div>
     {% if not pedidos %}
         <div class="empty-state-admin">
