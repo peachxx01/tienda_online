@@ -279,19 +279,15 @@ def reset_db():
     try:
         db.session.execute(text("SET FOREIGN_KEY_CHECKS=0"))
 
-        db.session.execute(text("DELETE FROM pedido_item"))
-        db.session.execute(text("DELETE FROM pedido"))
-        db.session.execute(text("DELETE FROM carrito_item"))
-        db.session.execute(text("DELETE FROM carrito"))
-        db.session.execute(text("DELETE FROM producto"))
+        db.drop_all()
+        db.create_all()
 
         db.session.execute(text("SET FOREIGN_KEY_CHECKS=1"))
-
         db.session.commit()
 
-        return "DB limpiada", 200
+        return "Base reiniciada correctamente", 200
 
     except Exception as e:
         db.session.rollback()
-        print("ERROR:", e)
-        return "Error", 500
+        print("ERROR RESET:", e)
+        return "Error al reiniciar", 500
