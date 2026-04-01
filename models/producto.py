@@ -12,6 +12,7 @@ class Producto(db.Model):
     descripcion = db.Column(db.Text, nullable=True)
     stock= db.Column(db.Integer, nullable=False)
     imagen= db.Column(db.String(200), nullable=True)
+    imagen_public_id = db.Column(db.String(200), nullable=True)
     categoria_id = db.Column(
         db.Integer,
         db.ForeignKey('categoria.id_categoria'),

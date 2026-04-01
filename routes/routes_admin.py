@@ -1,8 +1,6 @@
-import os
-import uuid
+import cloudinary.uploader
 from sqlalchemy import exists, and_
 from flask import Blueprint, request, redirect, url_for, render_template, flash, current_app
-from werkzeug.utils import secure_filename
 from models.db import db
 from models.producto import Producto
 from models.categoria import Categoria
@@ -74,13 +72,11 @@ def borrar_producto(id_producto):
         return redirect(request.referrer)
 
     if producto.imagen:
-        ruta_imagen = os.path.join(
-            current_app.root_path,
-            'static/uploads/productos',
-            producto.imagen
-        )
-        if os.path.exists(ruta_imagen):
-            os.remove(ruta_imagen)
+        if producto.imagen_public_id:
+            try:
+                cloudinary.uploader.destroy(producto.imagen_public_id)
+            except Exception as e:
+                print("Error eliminando imagen:", e)
 
     #soft delete
     producto.activo = False
@@ -126,17 +122,13 @@ def crear_producto():
         
         imagen_file=request.files.get('imagen')
         nombre_imagen= None
+        imagen_public_id = None
 
-        #Guardar imagen con nombre unico
-        if imagen_file and imagen_file.filename !='':
+        if imagen_file and imagen_file.filename != '':
             if allowed_file(imagen_file.filename):
-                extension = os.path.splitext(imagen_file.filename)[1]
-                #Se saca la extension del archivo ya que el nombre se le da con uuid
-                nombre_unico= f"{uuid.uuid4().hex}{extension}"
-                filename= secure_filename(nombre_unico)
-                ruta=os.path.join(current_app.root_path, 'static/uploads/productos', filename)
-                imagen_file.save(ruta)
-                nombre_imagen=filename
+                resultado = cloudinary.uploader.upload(imagen_file,folder="productos")
+                nombre_imagen = resultado['secure_url']
+                imagen_public_id = resultado['public_id']
             else:
                 flash("Formato de imagen no permitido (solo jpg, jpeg, png)", "danger")
                 return redirect(request.url)
@@ -149,7 +141,8 @@ def crear_producto():
             stock=int(stock),
             categoria_id=int(categoria_id),
             popular=popular,
-            imagen=nombre_imagen
+            imagen=nombre_imagen,
+            imagen_public_id=imagen_public_id
         )
 
         db.session.add(nuevo_producto)
@@ -200,20 +193,18 @@ def editar_producto(id_producto):
 
         imagen_file=request.files.get('imagen')
 
-        if imagen_file and imagen_file.filename !='':
+        if imagen_file and imagen_file.filename != '':
+        
             if allowed_file(imagen_file.filename):
-                if producto.imagen:
-                    ruta_anterior=os.path.join(current_app.root_path, 'static/uploads/productos', producto.imagen)
-
-                    if os.path.exists(ruta_anterior):
-                        os.remove(ruta_anterior)
+                if producto.imagen_public_id:
+                    try:
+                        cloudinary.uploader.destroy(producto.imagen_public_id)
+                    except Exception as e:
+                        print("Error eliminando imagen anterior:", e)
             
-                    extension=os.path.splitext(imagen_file.filename)[1]
-                    nombre_unico= f"{uuid.uuid4().hex}{extension}"
-                    filename=secure_filename(nombre_unico)
-                    ruta=os.path.join(current_app.root_path, 'static/uploads/productos', filename)
-                    imagen_file.save(ruta)
-                    producto.imagen=filename
+                resultado = cloudinary.uploader.upload(imagen_file,folder="productos")
+                producto.imagen = resultado['secure_url']
+                producto.imagen_public_id = resultado['public_id']
             else:
                 flash("Formato de imagen no permitido", "danger")
                 return redirect(request.url)

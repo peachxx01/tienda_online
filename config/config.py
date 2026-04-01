@@ -14,3 +14,7 @@ MAX_CONTENT_LENGTH = 2 * 1024 * 1024
 SECRET_KEY = os.environ.get("SECRETKEY")
 MP_ACCESS_TOKEN = os.environ.get("MP_ACCESS_TOKEN")
 BASE_URL = os.environ.get("BASE_URL")
+
+CLOUD_NAME = os.environ.get("CLOUD_NAME")
+API_KEY = os.environ.get("API_KEY")
+API_SECRET = os.environ.get("API_SECRET")

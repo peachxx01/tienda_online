@@ -1,5 +1,6 @@
 from flask import Flask, render_template, flash, request, redirect
 import os
+import cloudinary
 from werkzeug.exceptions import RequestEntityTooLarge
 from datetime import timedelta
 from models.db import db
@@ -27,8 +28,11 @@ app = Flask(__name__)
 
 app.config.from_object(config)
 
-
-
+cloudinary.config(
+    cloud_name=app.config["CLOUD_NAME"],
+    api_key=app.config["API_KEY"],
+    api_secret=app.config["API_SECRET"]
+)
 
 db.init_app(app)
 
@@ -36,7 +40,6 @@ db.init_app(app)
 with app.app_context():
     #db.drop_all()
     db.create_all()
-    pass
    
 
 

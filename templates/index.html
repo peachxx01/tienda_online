@@ -17,7 +17,7 @@
                 <div class="card-producto">
                     <a href="{{ url_for('routes_productos.detalle_producto', id_producto=producto.id_producto) }}" class="card-link">
                         {% if producto.imagen %}
-                            <img src="{{ url_for('static', filename='uploads/productos/' ~ producto.imagen) }}" alt="{{ producto.nombre }}">
+                            <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
                         {% else %}
                             <img src="{{ url_for('static', filename='img/no-image.png') }}" alt="Sin imagen">
                         {% endif %}

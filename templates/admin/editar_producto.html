@@ -57,8 +57,7 @@
         <div class="form-group">
             <label>Imagen actual</label><br>
             {% if producto.imagen %}
-                <img src="{{ url_for('static', filename='uploads/productos/' ~ producto.imagen) }}"
-                     class="preview-img">
+                <img src="{{ producto.imagen }}" alt="{{ producto.nombre }}">
             {% else %}
                 Sin imagen
             {% endif %}
