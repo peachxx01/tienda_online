@@ -502,3 +502,50 @@ body {
     background-color: var(--rojo-error);
     color: white;
 }
+
+/* IMAGEN */
+.imagen-group {
+    grid-column: span 2;
+}
+
+.imagen-box {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #fffafa;
+    padding: 20px;
+    border-radius: 20px;
+    border: 1px solid var(--gris-suave);
+}
+
+.no-img {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+.imagen-box input[type="file"] {
+    background: white;
+    border: 1px solid var(--gris-suave);
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.imagen-box input[type="file"]:hover {
+    border-color: var(--rosa-principal);
+}
+
+/* CHECKBOX */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.checkbox-label input {
+    accent-color: var(--rosa-principal);
+    transform: scale(1.2);
+}
