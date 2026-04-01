@@ -1,5 +1,5 @@
 import cloudinary.uploader
-from sqlalchemy import exists, and_
+from sqlalchemy import exists, and_, text
 from flask import Blueprint, request, redirect, url_for, render_template, flash, current_app
 from models.db import db
 from models.producto import Producto
@@ -277,20 +277,21 @@ def cambiar_estado_admin(pedido_id):
 @routes_admin.route('/reset-db')
 def reset_db():
     try:
-        db.session.execute("SET FOREIGN_KEY_CHECKS=0")
+        db.session.execute(text("SET FOREIGN_KEY_CHECKS=0"))
 
-        db.session.execute("TRUNCATE TABLE pedido_item")
-        db.session.execute("TRUNCATE TABLE pedido")
-        db.session.execute("TRUNCATE TABLE carrito_item")
-        db.session.execute("TRUNCATE TABLE carrito")
-        db.session.execute("TRUNCATE TABLE producto")
+        db.session.execute(text("DELETE FROM pedido_item"))
+        db.session.execute(text("DELETE FROM pedido"))
+        db.session.execute(text("DELETE FROM carrito_item"))
+        db.session.execute(text("DELETE FROM carrito"))
+        db.session.execute(text("DELETE FROM producto"))
 
-        db.session.execute("SET FOREIGN_KEY_CHECKS=1")
+        db.session.execute(text("SET FOREIGN_KEY_CHECKS=1"))
+
         db.session.commit()
 
         return "DB limpiada", 200
 
     except Exception as e:
         db.session.rollback()
-        print(e)
+        print("ERROR:", e)
         return "Error", 500
