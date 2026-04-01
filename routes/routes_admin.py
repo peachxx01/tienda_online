@@ -275,17 +275,22 @@ def cambiar_estado_admin(pedido_id):
     return redirect(url_for('routes_admin.detalle_pedido_admin', pedido_id=pedido_id))
 
 
-@routes_admin.route('/reset-db')
-@login_required
-@admin_required
 def reset_db():
     try:
-        db.drop_all()
-        db.create_all()
+        db.session.execute("SET FOREIGN_KEY_CHECKS=0")
 
-        return "Base de datos reiniciada correctamente", 200
+        db.session.execute("TRUNCATE TABLE pedido_item")
+        db.session.execute("TRUNCATE TABLE pedido")
+        db.session.execute("TRUNCATE TABLE carrito_item")
+        db.session.execute("TRUNCATE TABLE carrito")
+        db.session.execute("TRUNCATE TABLE producto")
+
+        db.session.execute("SET FOREIGN_KEY_CHECKS=1")
+        db.session.commit()
+
+        return "DB limpiada", 200
 
     except Exception as e:
         db.session.rollback()
-        print("Error al resetear DB:", e)
-        return "Error al reiniciar la base de datos", 500
+        print(e)
+        return "Error", 500
