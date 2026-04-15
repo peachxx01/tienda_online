@@ -159,7 +159,7 @@ header {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 60px 20px; /* Espacio para que no pegue al navbar */
+    padding: 60px 20px; 
 }
 
 /* Títulos de sección */

@@ -1,6 +1,5 @@
 /* =========================================
-   PANEL Y PERFIL USUARIO - VIBRAS COSMÉTICA
-   VERSIÓN EXTENDIDA (274 LÍNEAS)
+   PANEL Y PERFIL USUARIO
 =========================================== */
 
 :root {
@@ -39,7 +38,7 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- BOTÓN VOLVER (ESTILO PILL PREMIUM) --- */
+/* --- BOTÓN VOLVER --- */
 .back-home-link, .back-link a {
     display: inline-flex;
     align-items: center;
@@ -84,7 +83,7 @@
     letter-spacing: -0.5px;
 }
 
-/* --- GRILLA DE ADMINISTRACIÓN (CORREGIDA PARA 4 COLUMNAS) --- */
+/* --- GRILLA DE ADMINISTRACIÓN --- */
 .user-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); 
@@ -128,7 +127,7 @@
 
 .card-body {
     display: flex;
-    flex-direction: row; /* Asegura horizontalidad */
+    flex-direction: row; 
     align-items: center;
     gap: 20px;
     width: 100%;
