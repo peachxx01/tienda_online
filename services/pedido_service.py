@@ -7,6 +7,7 @@ TRANSICIONES_VALIDAS={
     "cancelado":[]
 }
 
+#CAMBIO DE ESTADO DE PEDIDOS
 def cambiar_estado_pedido(pedido, nuevo_estado):
 
     if nuevo_estado not in TRANSICIONES_VALIDAS.get(pedido.estado, []):

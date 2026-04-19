@@ -191,7 +191,7 @@ header {
     gap: 35px;
 }
 
-/* ================= CARD PRODUCTO (MEJORADA) ================= */
+/* ================= CARD PRODUCTO ================= */
 .card-producto {
     background: var(--blanco);
     border-radius: 25px;
@@ -264,7 +264,7 @@ header {
     transform: scale(1.02);
 }
 
-/* ================= DETALLE PRODUCTO (PREMIUM) ================= */
+/* ================= DETALLE PRODUCTO ================= */
 .detalle-producto {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -467,7 +467,7 @@ header {
     }
 }
 
-/* Botón Volver a la Tienda (Pill Style) */
+/* Botón Volver a la Tienda */
 .back-home-link {
     display: inline-flex;
     align-items: center;

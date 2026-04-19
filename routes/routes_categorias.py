@@ -4,6 +4,7 @@ from models.producto import Producto
 
 routes_categorias = Blueprint('routes_categorias', __name__, url_prefix=('/categorias'))
 
+#FILTRADO DE CATEGORIAS POR SLUG
 @routes_categorias.route('/<slug>')
 def productos_por_categoria(slug):
     categoria = Categoria.query.filter_by(slug=slug).first_or_404()

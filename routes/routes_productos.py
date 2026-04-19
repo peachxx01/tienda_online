@@ -5,6 +5,7 @@ from models.producto import Producto
 
 routes_productos=Blueprint('routes_productos', __name__, url_prefix=('/productos'))
 
+#FUNCION DE BUSCADOR
 @routes_productos.route('/buscar')
 def buscar():
     q = request.args.get('q', '').strip()
@@ -25,6 +26,7 @@ def buscar():
 
     return render_template('productos/resultados_busqueda.html',productos=productos,q=q)
 
+#FUNCION DETALLE DE UN PRODUCTO
 @routes_productos.route('/detalle/<int:id_producto>')
 def detalle_producto(id_producto):
     producto = Producto.query.filter_by(id_producto=id_producto,activo=True).first_or_404()

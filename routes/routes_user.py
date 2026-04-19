@@ -7,12 +7,15 @@ from utils.decorators import login_required
 
 routes_user= Blueprint('routes_user', __name__, url_prefix='/usuario')
 
+#FUNCION QUE VERIFICA QUE SE AGREGUEN VALORES
 def not_empty(*values):
     return all (v and str(v).strip() for v in values)
 
+#FUNCION DE VALIDACION DE TELEFONO
 def is_valid_phone(phone):
     return bool(re.fullmatch(r"\d{7,15}", phone))
 
+#DEVUELVE EL PANEL DE USUARIO
 @routes_user.route('/panel')
 @login_required
 def panel():
@@ -26,6 +29,7 @@ def panel():
     return render_template('usuarios/panel_usuario.html', usuario=usuario)
 
 
+#DEVUELVE LOS DATOS DEL USUARIO
 @routes_user.route('/perfil')
 @login_required
 def perfil():
@@ -38,6 +42,7 @@ def perfil():
     
     return render_template('usuarios/perfil.html', usuario=usuario)
 
+#MODIFICA DATOS DE USUARIO
 @routes_user.route('/update', methods=['GET','POST'])
 @login_required
 def update_user():
@@ -96,6 +101,7 @@ def update_user():
             return redirect(url_for('routes_user.perfil'))
     return render_template('usuarios/actualizar_usuario.html', usuario=usuario)
 
+#VER PEDIDOS DE UN USUARIO EN PARTICULAR
 @routes_user.route('/pedidos')
 @login_required
 def ver_pedidos():
@@ -108,6 +114,7 @@ def ver_pedidos():
     return render_template('usuarios/ver_pedidos_usuario.html', pedidos=pedidos)
 
 
+#VER DETALLE DE PEDIDO
 @routes_user.route('/pedido/detalle/<int:pedido_id>')
 @login_required
 def detalle_pedido(pedido_id):

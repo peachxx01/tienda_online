@@ -234,7 +234,7 @@ body {
     font-size: 0.95rem;
     transition: 0.3s;
     outline: none;
-    box-sizing: border-box; /* Crucial para evitar que se corten */
+    box-sizing: border-box; 
 }
 
 .form-group input:focus, 
@@ -318,7 +318,7 @@ body {
 .flash-message.error { background-color: var(--rojo-error); }
 .flash-message.danger { background-color: #8b1e1e; }
 
-/* --- SECCIÓN DE PEDIDOS ADMIN (LIMPIO Y CORREGIDO) --- */
+/* --- SECCIÓN DE PEDIDOS ADMIN --- */
 
 .text-right { text-align: right; }
 .text-center { text-align: center; }

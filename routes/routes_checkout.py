@@ -11,6 +11,7 @@ import mercadopago
 
 routes_checkout=Blueprint('routes_checkout', __name__, url_prefix='/checkout')
 
+#CHECKOUT(SE BORRA EL CARRITO, SE CREA PEDIDO Y SE HACE EL INIT POINT)
 @routes_checkout.route('/', methods=['POST'])
 @login_required
 def checkout():
@@ -69,24 +70,29 @@ def checkout():
         return redirect(url_for('routes_carrito.ver_carrito'))
 
 
+#MERCADO PAGO VUELVE A ESTA RUTA SI HUBO EXITO
 @routes_checkout.route('/success')
 @login_required
 def pago_success():
     flash("Estamos procesando tu pago, revisa el apartado de Mis  Pedidos", "info")
     return redirect(url_for('home'))
-    
+
+#MERCADO PAGO VUELVE A ESTA RUTA SI HAY UN FALLO
 @routes_checkout.route('/failure')
 @login_required
 def pago_failure():
     flash("El pago fue rechazado. Intentá nuevamente", "error")
     return redirect(url_for('routes_carrito.ver_carrito'))
 
+#MERCADO PAGO VUELVE A ESTA RUTA SI LA CONEXION QUEDO PENDIENTE
 @routes_checkout.route('/pending')
 @login_required
 def pago_pending():
     flash("Tu pago está pendiente de confirmación", "warning")
     return redirect(url_for('home'))
 
+
+#NOTIFICACION DE PAGO POR PARTE DE MERCADO PAGO
 @routes_checkout.route('/webhook', methods=['POST'])
 def webhook_mp():
     try:
@@ -131,7 +137,7 @@ def webhook_mp():
         if not pedido:
             return "Pedido no encontrado", 400
         
-        if pedido.estado == "pagado":
+        if pedido.estado == "pagado": #EVITAR PAGOS DUPLICADOS
             return "OK", 200
 
         if status == "approved":

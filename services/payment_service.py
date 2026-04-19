@@ -1,6 +1,8 @@
 import mercadopago
 from flask import current_app, url_for
 
+#CREAR PREFERENCIA DE MERCADO PAGO
+#CONSULTAR DOCUMENTACION 
 def crear_preferencia(pedido):
 
     token = current_app.config.get("MP_ACCESS_TOKEN")

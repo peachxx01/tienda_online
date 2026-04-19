@@ -2,6 +2,7 @@ from functools import wraps
 from flask import session, redirect, url_for, flash
 from models.usuario import Usuario
 
+#DECORADOR DE INICIO DE SESION REQUERIDO
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -18,6 +19,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+#DECORADOR DE USUARIO ADMINISTRADOR REQUERIDO
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):

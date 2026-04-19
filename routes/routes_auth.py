@@ -4,6 +4,8 @@ from models.usuario import Usuario
 
 routes_auth=Blueprint('routes_auth', __name__, url_prefix='/auth' )
 
+
+#REGISTRO
 @routes_auth.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method=='POST':
@@ -25,6 +27,8 @@ def register():
         return redirect (url_for('routes_auth.login'))
     return render_template('usuarios/register.html')
 
+
+#LOGIN
 @routes_auth.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method=='POST':
@@ -47,6 +51,8 @@ def login():
                 return redirect(url_for('routes_auth.login'))
     return render_template('usuarios/login.html')
 
+
+#LOGOUT
 @routes_auth.route('/logout', methods=['POST'])
 def logout():
     if request.method=='POST':

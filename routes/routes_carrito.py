@@ -7,6 +7,7 @@ from utils.decorators import login_required
 
 routes_carrito= Blueprint('routes_carrito', __name__, url_prefix='/carrito')
 
+#OBTIENE CARRITO, SINO LO CREA
 def obtener_carrito_activo(usuario_id):
     carrito=Carrito.query.filter_by(usuario_id=usuario_id, estado="activo").first()
 
@@ -16,6 +17,7 @@ def obtener_carrito_activo(usuario_id):
         db.session.commit()
     return carrito
 
+#MUESTRA LOS ITEMS DE CARRITO
 @routes_carrito.route("/ver")
 @login_required
 def ver_carrito():
@@ -31,6 +33,8 @@ def ver_carrito():
     
     return render_template("carrito/carrito.html", items=carrito.items, total=total)
 
+
+#AGREGA UN PRODUCTO AL CARRITO, AÑADE SI HAY Y VERIFICA STOCK
 @routes_carrito.route("/agregar/<int:id_producto>", methods=['POST'])
 @login_required
 def agregar_al_carrito(id_producto):
@@ -60,6 +64,7 @@ def agregar_al_carrito(id_producto):
     flash("Producto agregado al carrito", "success")
     return redirect(request.referrer)
 
+#LOGICA BOTON AUMENTAR CANTIDAD
 @routes_carrito.route('/aumentar/<int:id_item>', methods=['POST'])
 @login_required
 def aumentar_cantidad(id_item):
@@ -79,6 +84,8 @@ def aumentar_cantidad(id_item):
 
     return redirect(url_for('routes_carrito.ver_carrito'))
 
+
+#LOGICA BOTON DISMINUIR CANTIDAD
 @routes_carrito.route('/disminuir/<int:id_item>', methods=['POST'])
 @login_required
 def disminuir_cantidad(id_item):
@@ -98,7 +105,7 @@ def disminuir_cantidad(id_item):
 
     return redirect(url_for('routes_carrito.ver_carrito'))
 
-
+#ELIMINAR PRODUCTO DEL CARRITO
 @routes_carrito.route('/eliminar/<int:id_item>', methods=['POST'])
 @login_required
 def eliminar_item(id_item):

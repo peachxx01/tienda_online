@@ -13,11 +13,13 @@ routes_admin=Blueprint('routes_admin', __name__, url_prefix='/admin')
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
+#FUNCION PARA ADMITIR SOLO EXTENSIONES DE IMAGENES
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+#FUNCION PARA RETORNAR EL PANEL
 @routes_admin.route('/panel')
 @login_required
 @admin_required
@@ -25,6 +27,7 @@ def panel():
     return render_template('admin/panel_admin.html')
 
 
+#MOSTRAR STOCK Y FILTRADO POR CATEGORIAS
 @routes_admin.route('/stock')
 @login_required
 @admin_required
@@ -48,6 +51,8 @@ def inventario():
     )
 
 
+#BORRAR PRODUCTO
+#EVITA ELIMINARLO SI HAY UN PEDIDO ASOCIADO A ESE PRODUCTO
 @routes_admin.route('/borrar/<int:id_producto>', methods=['POST'])
 @login_required
 @admin_required
@@ -85,6 +90,8 @@ def borrar_producto(id_producto):
     flash("Producto eliminado correctamente", "success")
     return redirect(url_for('routes_admin.inventario'))
 
+
+#CREAR PRODUCTO
 @routes_admin.route('/crear', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -155,6 +162,7 @@ def crear_producto():
     return render_template('admin/crear_producto.html', categorias=categorias)
 
 
+#EDITAR PRODUCTO
 @routes_admin.route('/editar/<int:id_producto>', methods=['GET', 'POST'])
 @login_required
 @admin_required
@@ -218,6 +226,7 @@ def editar_producto(id_producto):
     return render_template('admin/editar_producto.html', producto=producto, categorias=categorias)
 
 
+#DEVOLVER PEDIDOS Y ESTADO DE LOS PEDIDOS
 @routes_admin.route('/pedidos')
 @login_required
 @admin_required
@@ -247,6 +256,7 @@ def ver_pedidos_admin():
         estado_actual=estado
     )
 
+#DEVOLVER DETALLE DE UN PRODUCTO
 @routes_admin.route('/pedido/detalle/<int:pedido_id>')
 @login_required
 @admin_required
@@ -256,6 +266,7 @@ def detalle_pedido_admin(pedido_id):
     return render_template('admin/detalle_pedido_admin.html', pedido=pedido)
 
 
+#CAMBIAR ESTADO DEL PEDIDO
 @routes_admin.route('/pedido/<int:pedido_id>/estado', methods=['POST'])
 @login_required
 @admin_required
@@ -274,6 +285,9 @@ def cambiar_estado_admin(pedido_id):
     
     return redirect(url_for('routes_admin.detalle_pedido_admin', pedido_id=pedido_id))
 
+
+
+#RESETEO DE LA BD EN DESARROLLO
 @routes_admin.route('/reset-db')
 def reset_db():
     try:

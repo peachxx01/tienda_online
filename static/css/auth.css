@@ -195,7 +195,7 @@ button:hover {
 }
 
 .password-box input {
-    padding-right: 45px; /* Espacio para que el texto no tape el ojo */
+    padding-right: 45px; 
 }
 
 .toggle-password {
